@@ -1,0 +1,77 @@
+<canvas id="myCanvas"></canvas>
+
+
+<script>
+ // get the canvas element
+const canvas = document.getElementById("myCanvas");
+const ctx = canvas.getContext("2d");
+
+// set the canvas width and height
+canvas.width = 500;
+canvas.height = 300;
+
+// define the data for the chart
+const data = [
+  { label: "Red", value: 50, color: "#ff0000" },
+  { label: "Green", value: 100, color: "#00ff00" },
+  { label: "Blue", value: 75, color: "#0000ff" },
+];
+
+// calculate the maximum value in the data
+const maxDataValue = Math.max(...data.map(d => d.value));
+
+// define the dimensions of the chart area
+const chartArea = {
+  x: 50,
+  y: 50,
+  width: canvas.width - 100,
+  height: canvas.height - 100,
+};
+
+// define the dimensions of each bar and the gap between them
+const barWidth = (chartArea.width - (data.length - 1) * 10) / data.length;
+const maxBarHeight = chartArea.height - 10;
+
+// loop through the data and draw each bar
+data.forEach((d, i) => {
+  // calculate the height of the bar based on the data value and the maximum value
+  const barHeight = (d.value / maxDataValue) * maxBarHeight;
+
+  // calculate the position of the bar
+  const x = chartArea.x + i * (barWidth + 10);
+  const y = chartArea.y + maxBarHeight - barHeight;
+
+  // draw the bar
+  ctx.beginPath();
+  ctx.moveTo(x + 10, y);
+  ctx.lineTo(x + barWidth - 10, y);
+  ctx.quadraticCurveTo(x + barWidth, y, x + barWidth, y + 10);
+  ctx.lineTo(x + barWidth, y + barHeight - 10);
+  ctx.quadraticCurveTo(x + barWidth, y + barHeight, x + barWidth - 10, y + barHeight);
+  ctx.lineTo(x + 10, y + barHeight);
+  ctx.quadraticCurveTo(x, y + barHeight, x, y + barHeight - 10);
+  ctx.lineTo(x, y + 10);
+  ctx.quadraticCurveTo(x, y, x + 10, y);
+  ctx.closePath();
+  ctx.fillStyle = d.color;
+  ctx.fill();
+
+  // draw the label
+  ctx.font = "12px Arial";
+  ctx.fillStyle = "#000";
+  ctx.textAlign = "center";
+  ctx.fillText(d.label, x + barWidth / 2, chartArea.y + chartArea.height + 20);
+
+  // add click event listener to the bar
+  canvas.addEventListener("click", (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    if (mouseX >= x && mouseX <= x + barWidth && mouseY >= y && mouseY <= y + barHeight) {
+      alert(`Value: ${d.value}`);
+    }
+  });
+});
+
+</script>
