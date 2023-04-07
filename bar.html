@@ -6,24 +6,43 @@
 		canvas {
 			border: 1px solid black;
 		}
+
+    #tooltip {
+      display: none;
+      padding: 10px;
+      border-radius: 5px;
+      color: #fff;
+    }
 	</style>
 </head>
 <body>
 	<canvas id="canvas"></canvas>
+  <div id="tooltip"></div>
 	<script>
 		const canvas = document.getElementById("canvas");
 		const ctx = canvas.getContext("2d");
 		
 		// Data for the chart
 		const data = [
-			{ label: "Monday", values: [10, 20] },
-			{ label: "Tuesday", values: [15, 25] },
-      { label: "Wednesday", values: [20, 30] },
-      { label: "Thursday", values: [25, 35] },
-      { label: "Friday", values: [15, 40] },
-      { label: "Saturday", values: [10, 45] },
-      { label: "Sunday", values: [40, 50] }
+			{ label: "January", values: [10, 20] },
+			{ label: "February", values: [25, 10] },
+      { label: "March", values: [15, 30] },
+      { label: "April", values: [30, 15] },
+      { label: "May", values: [20, 25] },
+      { label: "June", values: [35, 20] },
+      { label: "July", values: [56, 35] },
+      { label: "August", values: [40, 12] },
+      { label: "September", values: [20, 40] },
+      { label: "October", values: [45, 60] },
+      { label: "November", values: [14, 45] },
+      { label: "December", values: [50, 20] }
 		];
+
+    //lagend
+      const legendItems = [
+        { label: "Pending", color: "#DFE7EE" },
+        { label: "Completed", color: "#65BB64" }
+      ];
 		
 		// Colors for the bars
 		const colors = ["#DFE7EE", "#65BB64"];
@@ -63,19 +82,8 @@
 				ctx.closePath();
 				ctx.fill();
 
-        // when the mouse is over the bar, draw a tooltip
-        canvas.addEventListener("mousemove", e => {
-          const rect = canvas.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          if (x >= x && x <= x + width && y >= y && y <= y + height) {
-            ctx.fillStyle = "#000";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.font = "bold 12px sans-serif";
-            ctx.fillText(value, x + width / 2, y + height / 2);
-          }
-        });
+        // Add event listener to show tooltip on click
+        canvas.addEventListener("click", showTooltip);
 
 			});
 
@@ -97,6 +105,41 @@
         ctx.fillText(group.label, labelX, labelY);
       }
 		});
+
+    // Draw the legend
+    legendItems.forEach((item, index) => {
+      const x = canvas.width - padding - 100;
+      const y = padding + (index * 20);
+      ctx.fillStyle = item.color;
+      ctx.fillRect(x, y, 10, 10);
+      ctx.fillStyle = "#000";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillText(item.label, x + 15, y);
+    });
+
+
+
+    // function to show tooltip on click where the mouse is clicked
+    function showTooltip(e) {
+      const x = e.clientX - canvas.offsetLeft;
+      const y = e.clientY - canvas.offsetTop;
+      const barIndex = Math.floor(x / (barWidth * data[0].values.length));
+      const valueIndex = Math.floor((x - (barIndex * barWidth * data[0].values.length)) / barWidth);
+      const value = data[barIndex].values[valueIndex];
+      const label = data[barIndex].label;
+      const color = colors[valueIndex];
+      const tooltip = document.getElementById("tooltip");
+      // style and position the tooltip where the mouse is clicked
+      tooltip.style.display = "block";
+      tooltip.style.left = x + "px";
+      tooltip.style.top = y + "px";
+      tooltip.style.backgroundColor = color;
+      // position absolute
+      tooltip.style.position = "absolute";
+      tooltip.innerHTML = `<strong>${label}</strong><br>${value}`;
+    }
 	</script>
 </body>
 </html>
