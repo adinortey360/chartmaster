@@ -1,85 +1,88 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Stacked Bar Chart with Rounded Edges</title>
-	<style type="text/css">
-		canvas {
-			border: 1px solid black;
-		}
-	</style>
+    <title>Stacked Bar Chart with Rounded Edges</title>
+    <style type="text/css">
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
 </head>
+
 <body>
-	<canvas id="chart-canvas"></canvas>
-	<script type="text/javascript">
-// Define the data for the chart
-const chartData = [  { label: 'Matthew Appiah', values: [20, 30, 50], colors: ['#0066CC', '#0077CC', '#0088CC'] },
-  { label: 'Paul Yelson', values: [40, 20, 40], colors: ['#3399CC', '#33AACC', '#33BBCC'] },
-  { label: 'Catherine Dansuah', values: [60, 10, 30], colors: ['#66CCCC', '#77CCCC', '#88CCCC'] },
+    <canvas id="chart-canvas"></canvas>
+    <script type="text/javascript">
+        // Define the data for the chart
+        const chartData = [{ label: 'Matthew Appiah', values: [20, 30, 50], colors: ['#0066CC', '#0077CC', '#0088CC'] },
+        { label: 'Paul Yelson', values: [40, 20, 40], colors: ['#3399CC', '#33AACC', '#33BBCC'] },
+        { label: 'Catherine Dansuah', values: [60, 10, 30], colors: ['#66CCCC', '#77CCCC', '#88CCCC'] },
 
-];
+        ];
 
-// Define the canvas element and context
-const canvas = document.getElementById('chart-canvas');
-const ctx = canvas.getContext('2d');
+        // Define the canvas element and context
+        const canvas = document.getElementById('chart-canvas');
+        const ctx = canvas.getContext('2d');
 
-// Set the dimensions of the canvas based on available space
-canvas.width = canvas.parentNode.offsetWidth;
-canvas.height = canvas.parentNode.offsetHeight;
+        // Set the dimensions of the canvas based on available space
+        canvas.width = canvas.parentNode.offsetWidth;
+        canvas.height = canvas.parentNode.offsetHeight;
 
-// Calculate the width and height of the chart area
-const chartWidth = canvas.width * 0.8;
-const chartHeight = canvas.height * 0.8;
-const chartX = canvas.width * 0.05;
-const chartY = canvas.height * 0.01;
+        // Calculate the width and height of the chart area
+        const chartWidth = canvas.width * 0.8;
+        const chartHeight = canvas.height * 0.8;
+        const chartX = canvas.width * 0.05;
+        const chartY = canvas.height * 0.01;
 
-// Calculate the height of each bar and the total height of the chart
-const barHeight = chartHeight / (chartData[0].values.length + 1);
-const totalBarHeight = barHeight * chartData.length;
+        // Calculate the height of each bar and the total height of the chart
+        const barHeight = chartHeight / (chartData[0].values.length + 1);
+        const totalBarHeight = barHeight * chartData.length;
 
-// Define the gap between the groups
-const groupGap = barHeight / 1.5;
+        // Define the gap between the groups
+        const groupGap = barHeight / 1.5;
 
-// Draw the bars and labels
-ctx.font = '12px Arial';
-ctx.textAlign = 'center';
-let labelY = chartY + barHeight / 2;
-for (let i = 0; i < chartData.length; i++) {
-  const data = chartData[i];
-  let y = chartY + ((i + 0.5) * barHeight) + (i * groupGap);
-  let totalValue = 0;
-  for (let j = 0; j < data.values.length; j++) {
-    totalValue += data.values[j];
-  }
-  let x = chartX;
-  for (let j = 0; j < data.values.length; j++) {
-    let value = data.values[j];
-    ctx.fillStyle = data.colors[j];
-    let barWidth = value / totalValue * chartWidth;
-    ctx.beginPath();
-    ctx.moveTo(x + 10, y - barHeight / 2);
-    ctx.lineTo(x + barWidth - 10, y - barHeight / 2);
-    ctx.arcTo(x + barWidth, y - barHeight / 2, x + barWidth, y, 0);
-    ctx.lineTo(x + barWidth, y + barHeight / 2);
-    ctx.arcTo(x + barWidth, y + barHeight, x + barWidth - 10, y + barHeight, 0);
-    ctx.lineTo(x + 10, y + barHeight);
-    ctx.arcTo(x, y + barHeight, x, y + barHeight / 2, 0);
-    ctx.lineTo(x, y);
-    ctx.arcTo(x, y - barHeight / 2, x + 10, y - barHeight / 2, 0);
-    ctx.closePath();
-    ctx.fill();
-    x += barWidth;
-  }
-  ctx.fillStyle = '#fff';
-  // Set font size and weight
-  ctx.font = 'bold 20px Arial';
-  //get width of text
-let textWidth = ctx.measureText(data.label.toUpperCase()).width;
-  // Set label position
-  ctx.fillText(data.label.toUpperCase(), chartX + (textWidth / 2) + 20, labelY+ barHeight / 2);
-  // Increment label position
-  labelY += barHeight + groupGap;
-}
+        // Draw the bars and labels
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'center';
+        let labelY = chartY + barHeight / 2;
+        for (let i = 0; i < chartData.length; i++) {
+            const data = chartData[i];
+            let y = chartY + ((i + 0.5) * barHeight) + (i * groupGap);
+            let totalValue = 0;
+            for (let j = 0; j < data.values.length; j++) {
+                totalValue += data.values[j];
+            }
+            let x = chartX;
+            for (let j = 0; j < data.values.length; j++) {
+                let value = data.values[j];
+                ctx.fillStyle = data.colors[j];
+                let barWidth = value / totalValue * chartWidth;
+                ctx.beginPath();
+                ctx.moveTo(x + 10, y - barHeight / 2);
+                ctx.lineTo(x + barWidth - 10, y - barHeight / 2);
+                ctx.arcTo(x + barWidth, y - barHeight / 2, x + barWidth, y, 0);
+                ctx.lineTo(x + barWidth, y + barHeight / 2);
+                ctx.arcTo(x + barWidth, y + barHeight, x + barWidth - 10, y + barHeight, 0);
+                ctx.lineTo(x + 10, y + barHeight);
+                ctx.arcTo(x, y + barHeight, x, y + barHeight / 2, 0);
+                ctx.lineTo(x, y);
+                ctx.arcTo(x, y - barHeight / 2, x + 10, y - barHeight / 2, 0);
+                ctx.closePath();
+                ctx.fill();
+                x += barWidth;
+            }
+            ctx.fillStyle = '#fff';
+            // Set font size and weight
+            ctx.font = 'bold 20px Arial';
+            //get width of text
+            let textWidth = ctx.measureText(data.label.toUpperCase()).width;
+            // Set label position
+            ctx.fillText(data.label.toUpperCase(), chartX + (textWidth / 2) + 20, labelY + barHeight / 2);
+            // Increment label position
+            labelY += barHeight + groupGap;
+        }
 
-	</script>
+    </script>
 </body>
+
 </html>
