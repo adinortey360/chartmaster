@@ -29,8 +29,8 @@ canvas.height = canvas.parentNode.offsetHeight;
 // Calculate the width and height of the chart area
 const chartWidth = canvas.width * 0.8;
 const chartHeight = canvas.height * 0.8;
-const chartX = canvas.width * 0.1;
-const chartY = canvas.height * 0.1;
+const chartX = canvas.width * 0.05;
+const chartY = canvas.height * 0.01;
 
 // Calculate the height of each bar and the total height of the chart
 const barHeight = chartHeight / (chartData[0].values.length + 1);
@@ -39,9 +39,10 @@ const totalBarHeight = barHeight * chartData.length;
 // Define the gap between the groups
 const groupGap = barHeight / 1.5;
 
-// Draw the bars
+// Draw the bars and labels
 ctx.font = '12px Arial';
 ctx.textAlign = 'center';
+let labelY = chartY + barHeight / 2;
 for (let i = 0; i < chartData.length; i++) {
   const data = chartData[i];
   let y = chartY + ((i + 0.5) * barHeight) + (i * groupGap);
@@ -69,11 +70,14 @@ for (let i = 0; i < chartData.length; i++) {
     x += barWidth;
   }
   ctx.fillStyle = '#fff';
-//   font size
-    ctx.font = '20px Arial';
-    // font weight
-    ctx.font = 'bold 20px Arial';
-  ctx.fillText((data.label).toUpperCase(), chartX + 70, y + 6);
+  // Set font size and weight
+  ctx.font = 'bold 20px Arial';
+  //get width of text
+let textWidth = ctx.measureText(data.label.toUpperCase()).width;
+  // Set label position
+  ctx.fillText(data.label.toUpperCase(), chartX + (textWidth / 2) + 20, labelY+ barHeight / 2);
+  // Increment label position
+  labelY += barHeight + groupGap;
 }
 
 	</script>
